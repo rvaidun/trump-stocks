@@ -17,9 +17,20 @@ def get_stock_market_reaction(tweet):
     Returns:
         str: The predicted reaction (e.g., "extremely strong", "strong", "moderate", "weak", "no reaction").
     """
+
     prompt = (
-        f"Analyze the following tweet and predict its impact on the US stock market: {tweet}\n"
-        "Classify the reaction as one of the following: extremely strong, strong, moderate, weak, or no reaction."
+        "Example 1:\n"
+        "Tweet: 'The latest unemployment figures indicate improvement, likely boosting investor confidence.'\n"
+        'Output: {"reaction": "moderate"}\n\n'
+        "Example 2:\n"
+        "Tweet: 'Enjoyed a wonderful meal tonight!'\n"
+        'Output: {"reaction": "no reaction"}\n\n'
+        f"Analyze the following tweet for indications that it discusses the US economy or stock market:\n"
+        f"Tweet: {tweet}\n\n"
+        "If the tweet discusses topics like financial performance, market conditions, economic indicators, or other related factors, "
+        "classify the tweet's expected market reaction as one of the following: extremely strong, strong, moderate, or weak. "
+        "If not, or if the content is ambiguous, output 'no reaction'.\n\n"
+        'Return your answer exactly in JSON format: {"reaction": "<reaction_value>"}.'
     )
 
     try:
@@ -28,7 +39,7 @@ def get_stock_market_reaction(tweet):
             input=[
                 {
                     "role": "system",
-                    "content": "Your goal is to determine if the tweet is talking about the economy or stock market. If it is, classify the reaction as one of the following: extremely strong, strong, moderate, weak, or no reaction. If it is not talking about the economy or stock market, return 'no reaction'. Having a strong reaction means that the tweet is likely to have a significant impact on the stock market and stocks will go up or down significantly. If you are not sure, return 'no reaction'.",
+                    "content": "You are a financial analyst",
                 },
                 {"role": "user", "content": prompt},
             ],
@@ -48,9 +59,13 @@ def get_stock_market_reaction(tweet):
                                     "weak",
                                     "no reaction",
                                 ],
-                            }
+                            },
+                            "reasoning": {
+                                "type": "string",
+                                "description": "The reasoning behind the classification",
+                            },
                         },
-                        "required": ["reaction"],
+                        "required": ["reaction", "reasoning"],
                         "additionalProperties": False,
                     },
                     "strict": True,
@@ -65,7 +80,10 @@ def get_stock_market_reaction(tweet):
         return "Error"
 
 
-# tweet = """
-# This is a GREAT time to move your COMPANY into the United States of America, like Apple, and so many others, in record numbers, are doing. ZERO TARIFFS, and almost immediate Electrical/Energy hook ups and approvals. No Environmental Delays. DON’T WAIT, DO IT NOW!
-# """
-# get_stock_market_reaction(tweet)
+if __name__ == "__main__":
+    # Example usage
+    tweet = """
+Based on the lack of respect that China has shown to the World’s Markets, I am hereby raising the Tariff charged to China by the United States of America to 125%, effective immediately. At some point, hopefully in the near future, China will realize that the days of ripping off the U.S.A., and other Countries, is no longer sustainable or acceptable. Conversely, and based on the fact that more than 75 Countries have called Representatives of the United States, including the Departments of Commerce, Treasury, and the USTR, to negotiate a solution to the subjects being discussed relative to Trade, Trade Barriers, Tariffs, Currency Manipulation, and Non Monetary Tariffs, and that these Countries have not, at my strong suggestion, retaliated in any way, shape, or form against the United States, I have authorized a 90 day PAUSE, and a substantially lowered Reciprocal Tariff during this period, of 10%, also effective immediately. Thank you for your attention to this matter!
+    """
+    reaction = get_stock_market_reaction(tweet)
+    print(f"Predicted stock market reaction: {reaction}")

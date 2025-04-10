@@ -476,9 +476,6 @@ class Api:
 
 
 if __name__ == "__main__":
-    # print(api.user_followers(user_handle="realDonaldTrump"))
-    # print(api.user_following(user_handle="realDonaldTrump"))
-    # print(api.pull_comments("https://truthsocial.com/@realDonaldTrump/posts/110313383421799698"))
     now_date = datetime.now(timezone.utc)
     api = Api()
     error_sleep = 10
