@@ -1,0 +1,15 @@
+[project]
+name = "stocks"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dotenv>=0.9.9",
+    "openai>=1.72.0",
+    "requests>=2.32.3",
+    "truthbrush",
+]
+
+[tool.uv.sources]
+truthbrush = { git = "https://github.com/stanfordio/truthbrush.git" }
